@@ -98,20 +98,16 @@ Include chosen license here (e.g. MIT, Apache 2.0, GNU GPLv3). Your license file
 ## ✉️ Contact & Support
 
 - Open an issue for bugs or suggestions.
-- Reach out via email or Discord (if listed).
-- Join the project Discord server (if available).
+- Reach out via email or Discord.
 
 ---
 
 ## 🏷️ Credits
 
-- **Author**: [Your Name]
-- **Contributors**: List of contributors
+- **Author**: Shriyash Sawant
+- **Contributors**: Shriyash Sawant
 - Built using Minecraft Forge—thank you to everyone in the modding community!
 
 ---
 
-*This README can be tailored further depending on whether your mod includes an in-game quest system, integrates with other mods like **Botania** or **Mystical Agriculture**, or is intended for use with NeoForge or major modpacks such as Verdant Idea.*
 
-Let me know if you’d like help customizing it further—for example, linking to actual config files, quests, or integration code!
-::contentReference[oaicite:0]{index=0}
