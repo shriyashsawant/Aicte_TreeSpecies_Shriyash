@@ -21,7 +21,17 @@
 4. Launch Minecraft with the corresponding Forge profile.
 
 ---
+## What technologies are used for this project?
 
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+---
 ## ⚙️ Configuration
 
 - Default options typically located in `config/verdant-vision-forge.json`.
@@ -81,17 +91,6 @@ Please ensure all new code is doc-commented and includes necessary tests or exam
 ## 📄 License
 
 Include chosen license here (e.g. MIT, Apache 2.0, GNU GPLv3). Your license file should reflect this.
-
----
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
 
 ---
 
