@@ -83,8 +83,17 @@ Please ensure all new code is doc-commented and includes necessary tests or exam
 Include chosen license here (e.g. MIT, Apache 2.0, GNU GPLv3). Your license file should reflect this.
 
 ---
+## What technologies are used for this project?
 
-## ✉️ Contact & Support
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+---
 
 - Open an issue for bugs or suggestions.
 - Reach out via email or Discord (if listed).
