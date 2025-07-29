@@ -1,4 +1,0 @@
-project_id = "osddmpfqbkrwoiyyryzx"
-
-[functions.fetch-kaggle-dataset]
-verify_jwt = false
