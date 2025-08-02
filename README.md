@@ -13,8 +13,6 @@ An AI-powered web application to identify tree species from images. Built with R
 
 ---
 
-![Project Screenshot](https://i.imgur.com/g9c2ff9.png)
-
 ## 🌳 About The Project
 
 Tree Vision Buddy is a user-friendly tool that makes tree identification simple and accessible to everyone. The project solves the common problem of not being able to identify a tree by allowing users to upload a photo and get an instant, AI-powered analysis.
