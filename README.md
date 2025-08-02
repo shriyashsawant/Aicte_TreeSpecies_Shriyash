@@ -104,12 +104,6 @@ To contribute:
 
 ---
 
-## 📜 License
-
-Distributed under the MIT License. See `LICENSE` file for more information.
-
----
-
 ## 📧 Contact
 
 Shriyash Sawant - [shriyash.sawant.email@example.com](mailto:shriyash.sawant.email@example.com)
