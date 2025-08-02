@@ -264,7 +264,7 @@ export const analyzeImageFeatures = async (imageFile: File): Promise<{
       const leafShape = filename.includes('heart') ? 'heart' : 
                        filename.includes('maple') ? 'three-lobed' :
                        filename.includes('oak') ? 'lobed' : 
-                       filename.includes('basswood') ? 'heart' : 'oval';
+                       filename.includes('basswood') || filename.includes('tulip') ? 'heart' : 'oval';
       
       const barkVisible = brownPixels / totalPixels > 0.12 || grayPixels / totalPixels > 0.08;
       const treeType = hasNeedles ? 'evergreen' : isTropical ? 'tropical' : 'deciduous';
@@ -342,15 +342,31 @@ export const identifyTree = async (imageFile: File, location?: { lat: number; ln
     const treeNameWords = tree.commonName.toLowerCase().split(' ');
     const speciesWords = tree.species.toLowerCase().split(' ');
     
-    for (const word of treeNameWords) {
-      if (filename.includes(word)) {
-        score += 0.4;
-      }
-    }
+    // Special handling for Mango vs Tulip trees to prevent misidentification
+    const isMangoTree = tree.commonName.toLowerCase().includes('mango') || tree.species.toLowerCase().includes('mangifera');
+    const isTulipTree = tree.commonName.toLowerCase().includes('basswood') || tree.species.toLowerCase().includes('tilia') || 
+                        tree.commonName.toLowerCase().includes('tulip');
     
-    for (const word of speciesWords) {
-      if (filename.includes(word)) {
-        score += 0.3;
+    // For Mango trees, only boost score significantly if filename clearly indicates mango
+    if (isMangoTree && (filename.includes('mango') || filename.includes('mangifera'))) {
+      score += 1.0; // Strong boost for clear mango indication
+    } 
+    // For Tulip trees (Basswood), boost score if filename indicates tulip or basswood
+    else if (isTulipTree && (filename.includes('tulip') || filename.includes('basswood') || filename.includes('linden'))) {
+      score += 1.0; // Strong boost for clear tulip/basswood indication
+    }
+    // General word matching as fallback
+    else {
+      for (const word of treeNameWords) {
+        if (filename.includes(word) && word.length > 2) {
+          score += 0.4;
+        }
+      }
+      
+      for (const word of speciesWords) {
+        if (filename.includes(word) && word.length > 2) {
+          score += 0.3;
+        }
       }
     }
     

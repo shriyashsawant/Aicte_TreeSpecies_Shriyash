@@ -93,14 +93,33 @@ const TreeUpload = () => {
       
       setIdentificationResult(result);
       
-      // Save to history
-      const history = JSON.parse(localStorage.getItem('treeHistory') || '[]');
-      history.unshift({
-        ...result,
-        id: Date.now(),
-        image: imagePreview,
-      });
-      localStorage.setItem('treeHistory', JSON.stringify(history.slice(0, 50))); // Keep last 50
+      // Save to history with quota management
+      try {
+        const history = JSON.parse(localStorage.getItem('treeHistory') || '[]');
+        const newEntry = {
+          ...result,
+          id: Date.now(),
+          image: imagePreview,
+        };
+        history.unshift(newEntry);
+        
+        // Limit to 10 entries to prevent quota exceeded
+        const limitedHistory = history.slice(0, 10);
+        localStorage.setItem('treeHistory', JSON.stringify(limitedHistory));
+      } catch (quotaError) {
+        console.warn('localStorage quota exceeded, clearing history');
+        try {
+          // Clear and save only current entry
+          const freshHistory = [{
+            ...result,
+            id: Date.now(),
+            image: imagePreview,
+          }];
+          localStorage.setItem('treeHistory', JSON.stringify(freshHistory));
+        } catch {
+          console.warn('Cannot save to localStorage');
+        }
+      }
 
       toast({
         title: "Tree identified!",
@@ -192,17 +211,19 @@ const TreeUpload = () => {
             <Button 
               onClick={analyzeTree}
               disabled={!selectedImage || isAnalyzing}
-              className="min-w-32"
+              className="min-w-32 font-black uppercase tracking-wider"
+              variant="nature"
+              size="lg"
             >
               {isAnalyzing ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Analyzing...
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  ANALYZING...
                 </>
               ) : (
                 <>
-                  <Info className="mr-2 h-4 w-4" />
-                  Identify Tree
+                  <Info className="mr-2 h-5 w-5" />
+                  IDENTIFY TREE ⚡
                 </>
               )}
             </Button>
