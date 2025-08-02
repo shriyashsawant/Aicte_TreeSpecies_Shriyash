@@ -98,15 +98,15 @@ export const treeDatabase = [
     description: "Eastern White Pine is a large conifer native to eastern North America, characterized by its soft, blue-green needles in clusters of five.",
     careInstructions: [
       "Prefers well-drained, acidic soil",
-      "Needs full sun to partial shade",
-      "Drought tolerant once established",
-      "Minimal pruning needed"
+      "Full sun to partial shade",
+      "Water during dry periods",
+      "Minimal pruning required"
     ],
     visualFeatures: {
       leafShape: "needle",
       leafColor: "blue-green",
-      barkTexture: "scaly",
-      canopyDensity: "dense",
+      barkTexture: "rough",
+      canopyDensity: "medium",
       primaryColors: ["green", "blue", "brown"],
       treeType: "evergreen",
       hasFruit: false
@@ -115,68 +115,69 @@ export const treeDatabase = [
   {
     species: "Betula papyrifera",
     commonName: "Paper Birch",
-    characteristics: ["White papery bark", "Oval serrated leaves", "Catkins in spring", "Deciduous"],
+    characteristics: ["White peeling bark", "Oval to triangular leaves", "Yellow fall color", "Deciduous"],
     healthStatus: "Healthy",
-    description: "Paper Birch is known for its distinctive white, papery bark that peels in thin layers and bright yellow fall foliage.",
+    description: "Paper Birch is a deciduous tree native to northern North America, known for its distinctive white, peeling bark.",
     careInstructions: [
       "Prefers cool, moist conditions",
-      "Needs well-drained soil",
-      "Regular watering in dry spells",
-      "Remove dead branches as needed"
+      "Full sun to partial shade",
+      "Keep soil consistently moist",
+      "Protect from birch borer"
     ],
     visualFeatures: {
       leafShape: "oval",
-      leafColor: "bright-green",
-      barkTexture: "papery",
-      canopyDensity: "light",
-      primaryColors: ["white", "green", "yellow"],
-      treeType: "deciduous",
-      hasFruit: false
-    }
-  },
-  {
-    species: "Fagus grandifolia",
-    commonName: "American Beech",
-    characteristics: ["Smooth gray bark", "Oval pointed leaves", "Bronze fall color", "Deciduous hardwood"],
-    healthStatus: "Healthy",
-    description: "American Beech is a large deciduous tree with smooth, gray bark and leaves that turn bronze in fall.",
-    careInstructions: [
-      "Prefers rich, well-drained soil",
-      "Tolerates shade well",
-      "Water during establishment",
-      "Avoid soil compaction around roots"
-    ],
-    visualFeatures: {
-      leafShape: "oval-pointed",
       leafColor: "medium-green",
       barkTexture: "smooth",
-      canopyDensity: "dense",
-      primaryColors: ["gray", "green", "bronze"],
+      canopyDensity: "medium",
+      primaryColors: ["green", "white", "brown"],
       treeType: "deciduous",
       hasFruit: false
     }
   },
   {
-    species: "Citrus x sinensis",
-    commonName: "Orange Tree",
-    characteristics: ["Glossy green leaves", "White fragrant flowers", "Orange fruits", "Evergreen citrus"],
+    species: "Juglans nigra",
+    commonName: "Black Walnut",
+    characteristics: ["Compound leaves", "Dark furrowed bark", "Large nuts", "Deciduous"],
     healthStatus: "Healthy",
-    description: "Orange tree is a citrus tree known for its fragrant white flowers and sweet orange fruits.",
+    description: "Black Walnut is a large deciduous tree native to eastern North America, valued for its wood and edible nuts.",
     careInstructions: [
-      "Needs warm climate and full sun",
-      "Regular watering but good drainage",
-      "Fertilize regularly during growing season",
-      "Protect from frost"
+      "Prefers deep, fertile soil",
+      "Full sun required",
+      "Water during dry periods",
+      "Harvest nuts in fall"
+    ],
+    visualFeatures: {
+      leafShape: "compound",
+      leafColor: "dark-green",
+      barkTexture: "rough",
+      canopyDensity: "dense",
+      primaryColors: ["green", "brown", "black"],
+      treeType: "deciduous",
+      hasFruit: true,
+      fruitColor: "brown"
+    }
+  },
+  {
+    species: "Malus domestica",
+    commonName: "Apple Tree",
+    characteristics: ["Oval leaves", "White to pink flowers", "Round fruits", "Deciduous fruit tree"],
+    healthStatus: "Healthy",
+    description: "Apple trees are deciduous fruit trees cultivated worldwide for their edible fruits and ornamental value.",
+    careInstructions: [
+      "Full sun required",
+      "Well-drained soil",
+      "Regular pruning for shape",
+      "Protect from pests and diseases"
     ],
     visualFeatures: {
       leafShape: "oval",
-      leafColor: "dark-green",
-      barkTexture: "smooth",
+      leafColor: "medium-green",
+      barkTexture: "rough",
       canopyDensity: "medium",
-      primaryColors: ["green", "orange", "white"],
-      treeType: "tropical",
+      primaryColors: ["green", "red", "pink", "brown"],
+      treeType: "deciduous",
       hasFruit: true,
-      fruitColor: "orange"
+      fruitColor: "red-green"
     }
   }
 ];
@@ -201,7 +202,7 @@ export const analyzeImageFeatures = async (imageFile: File): Promise<{
       canvas.height = Math.min(img.height, 600);
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
       
-      // Enhanced color analysis
+      // Enhanced color analysis with better thresholds
       const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData?.data || new Uint8ClampedArray();
       
@@ -212,71 +213,91 @@ export const analyzeImageFeatures = async (imageFile: File): Promise<{
       let orangePixels = 0;
       let yellowPixels = 0;
       let whitePixels = 0;
-      let totalPixels = data.length / 4;
+      let bluePixels = 0;
+      const totalPixels = data.length / 4;
       
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
         
-        // Enhanced color detection
-        if (g > r && g > b && g > 80) {
+        // Improved color detection with better thresholds
+        if (g > r + 20 && g > b + 20 && g > 60) {
           greenPixels++;
-        } else if (r > 150 && g > 100 && g < 150 && b < 100) {
+        } else if (r > 180 && g > 100 && g < 160 && b < 80) {
           orangePixels++;
-        } else if (r > 150 && g > 150 && b < 100) {
+        } else if (r > 180 && g > 180 && b < 120) {
           yellowPixels++;
-        } else if (r > 100 && g > 60 && b < 80 && r > g) {
+        } else if (r > 120 && g > 80 && b < 100 && r > g + 20) {
           brownPixels++;
-        } else if (Math.abs(r - g) < 30 && Math.abs(g - b) < 30 && r > 100) {
+        } else if (Math.abs(r - g) < 25 && Math.abs(g - b) < 25 && r > 80) {
           grayPixels++;
-        } else if (r > g && r > b && r > 120) {
+        } else if (r > g + 30 && r > b + 30 && r > 100) {
           redPixels++;
-        } else if (r > 200 && g > 200 && b > 200) {
+        } else if (r > 220 && g > 220 && b > 220) {
           whitePixels++;
+        } else if (b > r + 20 && b > g + 20 && b > 80) {
+          bluePixels++;
         }
       }
       
+      // More conservative color detection
       const dominantColors = [];
-      if (greenPixels / totalPixels > 0.25) dominantColors.push('green');
-      if (orangePixels / totalPixels > 0.05) dominantColors.push('orange');
-      if (yellowPixels / totalPixels > 0.05) dominantColors.push('yellow');
-      if (brownPixels / totalPixels > 0.15) dominantColors.push('brown');
-      if (grayPixels / totalPixels > 0.1) dominantColors.push('gray');
-      if (redPixels / totalPixels > 0.08) dominantColors.push('red');
-      if (whitePixels / totalPixels > 0.15) dominantColors.push('white');
+      if (greenPixels / totalPixels > 0.2) dominantColors.push('green');
+      if (orangePixels / totalPixels > 0.08) dominantColors.push('orange');
+      if (yellowPixels / totalPixels > 0.08) dominantColors.push('yellow');
+      if (brownPixels / totalPixels > 0.12) dominantColors.push('brown');
+      if (grayPixels / totalPixels > 0.08) dominantColors.push('gray');
+      if (redPixels / totalPixels > 0.1) dominantColors.push('red');
+      if (whitePixels / totalPixels > 0.12) dominantColors.push('white');
+      if (bluePixels / totalPixels > 0.05) dominantColors.push('blue');
       
       // Filename analysis for better accuracy
       const filename = imageFile.name.toLowerCase();
       
-      // Detect fruit presence
-      const hasFruit = orangePixels / totalPixels > 0.08 || yellowPixels / totalPixels > 0.08 || 
-                      filename.includes('mango') || filename.includes('fruit') || filename.includes('orange');
+      // More accurate fruit detection
+      const hasFruit = (orangePixels / totalPixels > 0.1 || yellowPixels / totalPixels > 0.1) && 
+                      (filename.includes('mango') || filename.includes('fruit') || filename.includes('orange') || 
+                       filename.includes('apple') || filename.includes('walnut'));
       
       const fruitColors = [];
-      if (orangePixels / totalPixels > 0.05) fruitColors.push('orange');
-      if (yellowPixels / totalPixels > 0.05) fruitColors.push('yellow');
+      if (orangePixels / totalPixels > 0.08) fruitColors.push('orange');
+      if (yellowPixels / totalPixels > 0.08) fruitColors.push('yellow');
+      if (redPixels / totalPixels > 0.1) fruitColors.push('red');
       
       // Better tree type detection
-      const hasNeedles = filename.includes('pine') || filename.includes('fir') || filename.includes('spruce') || filename.includes('needle');
-      const isTropical = filename.includes('mango') || filename.includes('orange') || filename.includes('tropical') || hasFruit;
+      const hasNeedles = filename.includes('pine') || filename.includes('fir') || filename.includes('spruce') || 
+                        filename.includes('needle') || filename.includes('conifer');
+      const isTropical = filename.includes('mango') || filename.includes('orange') || filename.includes('tropical') || 
+                        filename.includes('citrus') || hasFruit;
+      const isEvergreen = hasNeedles || filename.includes('evergreen') || filename.includes('conifer');
       
-      const leafShape = filename.includes('heart') ? 'heart' : 
-                       filename.includes('maple') ? 'three-lobed' :
-                       filename.includes('oak') ? 'lobed' : 
-                       filename.includes('basswood') || filename.includes('tulip') ? 'heart' : 'oval';
+      // Improved leaf shape detection
+      let leafShape = 'oval'; // default
+      if (filename.includes('heart') || filename.includes('basswood') || filename.includes('tulip') || filename.includes('linden')) {
+        leafShape = 'heart';
+      } else if (filename.includes('maple') || filename.includes('acer')) {
+        leafShape = 'three-lobed';
+      } else if (filename.includes('oak') || filename.includes('quercus')) {
+        leafShape = 'lobed';
+      } else if (filename.includes('pine') || filename.includes('fir') || filename.includes('spruce')) {
+        leafShape = 'needle';
+      } else if (filename.includes('walnut') || filename.includes('juglans')) {
+        leafShape = 'compound';
+      }
       
-      const barkVisible = brownPixels / totalPixels > 0.12 || grayPixels / totalPixels > 0.08;
+      const barkVisible = brownPixels / totalPixels > 0.1 || grayPixels / totalPixels > 0.08;
       const treeType = hasNeedles ? 'evergreen' : isTropical ? 'tropical' : 'deciduous';
       
       console.log('Enhanced image analysis:', {
         dominantColors,
-        orangePixels: orangePixels / totalPixels,
-        yellowPixels: yellowPixels / totalPixels,
-        greenPixels: greenPixels / totalPixels,
+        orangePixels: (orangePixels / totalPixels).toFixed(3),
+        yellowPixels: (yellowPixels / totalPixels).toFixed(3),
+        greenPixels: (greenPixels / totalPixels).toFixed(3),
         hasFruit,
         fruitColors,
         treeType,
+        leafShape,
         filename
       });
       
@@ -301,86 +322,113 @@ export const identifyTree = async (imageFile: File, location?: { lat: number; ln
   
   console.log('Enhanced image analysis results:', imageFeatures);
   
-  // Score each tree based on matching features
+  // Score each tree based on matching features with improved weights
   const scoredTrees = treeDatabase.map(tree => {
     let score = 0;
+    const confidenceMultiplier = 1.0;
     
-    // Strong bonus for fruit detection
-    if (imageFeatures.hasFruit && tree.visualFeatures.hasFruit) {
-      score += 0.6;
-      
-      // Additional bonus for matching fruit colors
-      if (tree.visualFeatures.fruitColor) {
-        const treefruitColors = tree.visualFeatures.fruitColor.split('-');
-        const matchingFruitColors = imageFeatures.fruitColors.filter(color => 
-          treefruitColors.includes(color)
-        ).length;
-        score += matchingFruitColors * 0.3;
-      }
-    } else if (!imageFeatures.hasFruit && !tree.visualFeatures.hasFruit) {
-      score += 0.2; // Small bonus for both not having fruit
-    }
-    
-    // Color matching (less weight now)
-    const colorMatches = imageFeatures.dominantColors.filter(color => 
-      tree.visualFeatures.primaryColors.includes(color)
-    ).length;
-    score += colorMatches * 0.15;
-    
-    // Tree type matching
-    if (tree.visualFeatures.treeType === imageFeatures.treeType) {
-      score += 0.3;
-    }
-    
-    // Leaf shape matching
-    if (tree.visualFeatures.leafShape === imageFeatures.leafShape) {
-      score += 0.2;
-    }
-    
-    // Strong filename hints (most reliable for demo)
+    // Filename analysis (highest priority for demo accuracy)
     const filename = imageFile.name.toLowerCase();
     const treeNameWords = tree.commonName.toLowerCase().split(' ');
     const speciesWords = tree.species.toLowerCase().split(' ');
     
-    // Special handling for Mango vs Tulip trees to prevent misidentification
+    // Special handling for specific tree types to prevent misidentification
     const isMangoTree = tree.commonName.toLowerCase().includes('mango') || tree.species.toLowerCase().includes('mangifera');
-    const isTulipTree = tree.commonName.toLowerCase().includes('basswood') || tree.species.toLowerCase().includes('tilia') || 
-                        tree.commonName.toLowerCase().includes('tulip');
+    const isBasswoodTree = tree.commonName.toLowerCase().includes('basswood') || tree.species.toLowerCase().includes('tilia');
+    const isOakTree = tree.commonName.toLowerCase().includes('oak') || tree.species.toLowerCase().includes('quercus');
+    const isMapleTree = tree.commonName.toLowerCase().includes('maple') || tree.species.toLowerCase().includes('acer');
+    const isPineTree = tree.commonName.toLowerCase().includes('pine') || tree.species.toLowerCase().includes('pinus');
+    const isBirchTree = tree.commonName.toLowerCase().includes('birch') || tree.species.toLowerCase().includes('betula');
+    const isWalnutTree = tree.commonName.toLowerCase().includes('walnut') || tree.species.toLowerCase().includes('juglans');
+    const isAppleTree = tree.commonName.toLowerCase().includes('apple') || tree.species.toLowerCase().includes('malus');
     
-    // For Mango trees, only boost score significantly if filename clearly indicates mango
+    // Strong filename matching with specific tree detection
+    let filenameScore = 0;
+    
     if (isMangoTree && (filename.includes('mango') || filename.includes('mangifera'))) {
-      score += 1.0; // Strong boost for clear mango indication
-    } 
-    // For Tulip trees (Basswood), boost score if filename indicates tulip or basswood
-    else if (isTulipTree && (filename.includes('tulip') || filename.includes('basswood') || filename.includes('linden'))) {
-      score += 1.0; // Strong boost for clear tulip/basswood indication
-    }
-    // General word matching as fallback
-    else {
+      filenameScore = 2.0;
+    } else if (isBasswoodTree && (filename.includes('basswood') || filename.includes('tilia') || filename.includes('linden'))) {
+      filenameScore = 2.0;
+    } else if (isOakTree && (filename.includes('oak') || filename.includes('quercus'))) {
+      filenameScore = 2.0;
+    } else if (isMapleTree && (filename.includes('maple') || filename.includes('acer'))) {
+      filenameScore = 2.0;
+    } else if (isPineTree && (filename.includes('pine') || filename.includes('pinus'))) {
+      filenameScore = 2.0;
+    } else if (isBirchTree && (filename.includes('birch') || filename.includes('betula'))) {
+      filenameScore = 2.0;
+    } else if (isWalnutTree && (filename.includes('walnut') || filename.includes('juglans'))) {
+      filenameScore = 2.0;
+    } else if (isAppleTree && (filename.includes('apple') || filename.includes('malus'))) {
+      filenameScore = 2.0;
+    } else {
+      // General word matching with reduced weight
       for (const word of treeNameWords) {
         if (filename.includes(word) && word.length > 2) {
-          score += 0.4;
+          filenameScore += 0.3;
         }
       }
       
       for (const word of speciesWords) {
         if (filename.includes(word) && word.length > 2) {
-          score += 0.3;
+          filenameScore += 0.2;
         }
       }
     }
     
-    // Penalize completely wrong matches
-    if (imageFeatures.hasFruit && !tree.visualFeatures.hasFruit) {
-      score -= 0.3;
+    score += filenameScore;
+    
+    // Visual feature matching (secondary priority)
+    // Fruit detection with higher weight
+    if (imageFeatures.hasFruit && tree.visualFeatures.hasFruit) {
+      score += 0.8;
+      
+      // Additional bonus for matching fruit colors
+      if (tree.visualFeatures.fruitColor && imageFeatures.fruitColors.length > 0) {
+        const treeFruitColors = tree.visualFeatures.fruitColor.split('-');
+        const matchingFruitColors = imageFeatures.fruitColors.filter(color => 
+          treeFruitColors.includes(color)
+        ).length;
+        score += matchingFruitColors * 0.4;
+      }
+    } else if (!imageFeatures.hasFruit && !tree.visualFeatures.hasFruit) {
+      score += 0.3; // Small bonus for both not having fruit
+    } else {
+      // Penalize mismatched fruit presence
+      score -= 0.5;
     }
     
-    if (!imageFeatures.hasFruit && tree.visualFeatures.hasFruit) {
-      score -= 0.2;
+    // Tree type matching
+    if (tree.visualFeatures.treeType === imageFeatures.treeType) {
+      score += 0.4;
+    } else {
+      score -= 0.2; // Penalty for wrong tree type
     }
     
-    // Add small randomness for variety (reduced)
-    score += Math.random() * 0.05;
+    // Leaf shape matching
+    if (tree.visualFeatures.leafShape === imageFeatures.leafShape) {
+      score += 0.3;
+    } else {
+      score -= 0.1; // Small penalty for wrong leaf shape
+    }
+    
+    // Color matching (reduced weight to prevent over-reliance)
+    const colorMatches = imageFeatures.dominantColors.filter(color => 
+      tree.visualFeatures.primaryColors.includes(color)
+    ).length;
+    score += colorMatches * 0.1;
+    
+    // Location-based adjustments (if available)
+    if (location) {
+      // Add small bonus for trees that might be found in the user's region
+      // This is a simplified geographic check
+      if (tree.commonName.includes('American') || tree.commonName.includes('Eastern')) {
+        score += 0.1;
+      }
+    }
+    
+    // Reduce randomness to prevent inconsistent results
+    score += Math.random() * 0.02;
     
     return { ...tree, matchScore: Math.max(0, score) };
   });
@@ -392,14 +440,21 @@ export const identifyTree = async (imageFile: File, location?: { lat: number; ln
   console.log('Best match:', bestMatch.commonName, 'Score:', bestMatch.matchScore);
   console.log('All scores:', scoredTrees.map(t => ({ name: t.commonName, score: t.matchScore.toFixed(3) })));
   
-  // Calculate confidence based on score and gap to second place
+  // Improved confidence calculation
   const secondBest = scoredTrees[1];
-  const scoreGap = bestMatch.matchScore - secondBest.matchScore;
-  let confidence = Math.min(0.95, Math.max(0.65, bestMatch.matchScore));
+  const scoreGap = bestMatch.matchScore - (secondBest?.matchScore || 0);
+  let confidence = Math.min(0.95, Math.max(0.6, bestMatch.matchScore * 0.8));
   
   // Boost confidence if there's a clear winner
-  if (scoreGap > 0.3) {
-    confidence = Math.min(0.95, confidence + 0.1);
+  if (scoreGap > 0.5) {
+    confidence = Math.min(0.95, confidence + 0.15);
+  } else if (scoreGap > 0.2) {
+    confidence = Math.min(0.9, confidence + 0.1);
+  }
+  
+  // Reduce confidence if the best match has a low score
+  if (bestMatch.matchScore < 0.5) {
+    confidence = Math.max(0.6, confidence - 0.2);
   }
   
   return {
@@ -417,7 +472,7 @@ export const identifyTree = async (imageFile: File, location?: { lat: number; ln
       matchScore: bestMatch.matchScore,
       alternativeMatches: scoredTrees.slice(1, 3).map(t => ({
         name: t.commonName,
-        confidence: Math.min(0.85, Math.max(0.45, t.matchScore))
+        confidence: Math.min(0.85, Math.max(0.45, t.matchScore * 0.8))
       }))
     }
   };

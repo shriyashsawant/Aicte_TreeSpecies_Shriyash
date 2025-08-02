@@ -89,6 +89,21 @@ const TreeUpload = () => {
         result = await identifyTree(selectedImage, location);
       }
       
+      // Validate the result before setting it
+      if (!result || !result.commonName || !result.species) {
+        throw new Error('Invalid identification result received');
+      }
+      
+      // Additional validation for confidence levels
+      if (result.confidence < 0.6) {
+        console.warn('Low confidence identification:', result.confidence);
+        toast({
+          title: "Low confidence identification",
+          description: "The identification has low confidence. Please try with a clearer image.",
+          variant: "destructive",
+        });
+      }
+      
       console.log('Analysis complete:', result);
       
       setIdentificationResult(result);
@@ -130,7 +145,7 @@ const TreeUpload = () => {
       console.error('Analysis failed:', error);
       toast({
         title: "Analysis failed",
-        description: "Unable to analyze the image. Please try again.",
+        description: "Unable to analyze the image. Please try again with a different image.",
         variant: "destructive",
       });
     } finally {
