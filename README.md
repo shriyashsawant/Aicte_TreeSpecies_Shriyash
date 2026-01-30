@@ -1,7 +1,6 @@
 <<<<<<< Updated upstream
 # Tree Vision Buddy 🌿
 
-# URL : https://aicte-tree-species-shriyash.vercel.app/
 
 An AI-powered web application to identify tree species from images. Built with React, Vite, TypeScript, and Supabase.
 
