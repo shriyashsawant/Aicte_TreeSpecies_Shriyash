@@ -187,7 +187,7 @@ To contribute:
 
 ## 📧 Contact
 
-Shriyash Sawant - [shriyash.sawant.email@example.com](mailto:shriyash.sawant.email@example.com)
+Shriyash Sawant - [shriyashsantoshsawant@gmail.com](mailto:shriyashsantoshsawant@gmail.com)
 
 Project Link: [https://github.com/shriyashsawant/Aicte_TreeSpecies_Shriyash](https://github.com/shriyashsawant/Aicte_TreeSpecies_Shriyash)
 =======
